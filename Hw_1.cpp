@@ -105,6 +105,7 @@ int main(){
         std::cerr << "Impossible to raise 0 to a negative power\n";
         return 1;
     }
+     
 
     try {
         double result_iterative = iterative(x,n);
