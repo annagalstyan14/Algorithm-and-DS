@@ -1,15 +1,16 @@
 #ifndef ARRAY_STACK_IPP
 #define ARRAY_STACK_IPP
+
 #include "ArrayStack.h"
 #include <stdexcept>
 
-template <typename T>
+template<typename T>
 arrayStack<T>::arrayStack(const arrayStack& other) : elements(other.elements) {}
 
-template <typename T>
+template<typename T>
 arrayStack<T>::arrayStack(arrayStack&& other) noexcept : elements(std::move(other.elements)) {}
 
-template <typename T>
+template<typename T>
 arrayStack<T>& arrayStack<T>::operator=(const arrayStack& other) {
     if (this != &other) {
         elements = other.elements;
@@ -17,7 +18,7 @@ arrayStack<T>& arrayStack<T>::operator=(const arrayStack& other) {
     return *this;
 }
 
-template <typename T>
+template<typename T>
 arrayStack<T>& arrayStack<T>::operator=(arrayStack&& other) noexcept {
     if (this != &other) {
         elements = std::move(other.elements);
@@ -25,35 +26,33 @@ arrayStack<T>& arrayStack<T>::operator=(arrayStack&& other) noexcept {
     return *this;
 }
 
-template <typename T>
+template<typename T>
 void arrayStack<T>::push(const T& value) {
-    try {
-        elements.push_back(value);
-    } catch (const std::bad_alloc&) {
-        throw std::runtime_error("Memory allocation failed in push");
-    }
+    elements.push_back(value);
 }
 
-template <typename T>
+template<typename T>
 void arrayStack<T>::pop() {
-    if (empty()) return;
+    if (empty()) {
+        throw std::out_of_range("Attempted to pop empty stack");
+    }
     elements.pop_back();
 }
 
-template <typename T>
+template<typename T>
 bool arrayStack<T>::empty() const {
     return elements.empty();
 }
 
-template <typename T>
+template<typename T>
 void arrayStack<T>::clear() {
     elements.clear();
 }
 
-template <typename T>
+template<typename T>
 const T& arrayStack<T>::top() const {
     if (empty()) {
-        throw std::runtime_error("Attempted to access top of empty stack");
+        throw std::out_of_range("Attempted to access top of empty stack");
     }
     return elements.back();
 }
