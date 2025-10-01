@@ -63,6 +63,12 @@ long long evaluatePostfix(std::vector<std::string>& arr) {
                 st.push(floorDiv(val2, val1));
             }
             else if (token == "^") {
+                if (val2 == 0 && val1 == 0) {
+                    throw std::invalid_argument("0^0 is undefined");
+                }
+                if (val1 < 0) {
+                    throw std::invalid_argument("Negative exponent not supported for integer results");
+                }
                 double result = std::pow(static_cast<double>(val2), static_cast<double>(val1));
                 if (result > static_cast<double>(std::numeric_limits<long long>::max()) ||
                     result < static_cast<double>(std::numeric_limits<long long>::min())) {
