@@ -57,4 +57,13 @@ const T& arrayStack<T>::top() const {
     return elements.back();
 }
 
+template <typename T>
+void swap(Stack<T>& first, Stack<T>& second) noexcept {
+    using std::swap;
+    swap(first.arr, second.arr);
+    swap(first.capacity, second.capacity);
+    swap(first.top, second.top);
+    swap(first.count, second.count);
+}
+
 #endif
