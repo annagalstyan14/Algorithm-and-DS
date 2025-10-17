@@ -20,6 +20,8 @@ public:
     void clear() override;
     const T& top() const override;
 
+    friend void swap(Stack& first, Stack& second) noexcept {}
+
 private:
     std::vector<T> elements;
 }; 
