@@ -17,6 +17,8 @@ public:
     bool empty() const;
     void clear();
     const T& top() const;
+
+    friend void swap(LinkedStack& first, LinkedStack& second) noexcept;
 private:
     Node<T>* m_top;
 };
