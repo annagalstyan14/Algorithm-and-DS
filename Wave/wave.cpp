@@ -1,66 +1,78 @@
 #include "wave.h"
-#include <iostream>
-#include <limits>
 
-void clearInputBuffer() {
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+bool isValid(int row, int col, int n, int m,
+             std::vector<std::vector<char>> &mat,
+             std::vector<std::vector<bool>> &visited) {
+    return row >= 0 && row < n &&
+           col >= 0 && col < m &&
+           mat[row][col] != '0' &&
+           !visited[row][col];
 }
 
-int main() {
-    int n, m;
-
-    std::cout << "Welcome to the Shortest Path Finder (Wave Algorithm)!\n";
-    std::cout << "Enter the matrix dimensions (rows columns):\n";
-
-    while (true) {
-        std::cout << "Rows: ";
-        if (std::cin >> n && n > 0) {
-            std::cout << "Columns: ";
-            if (std::cin >> m && m > 0) {
-                break;
-            }
-        }
-        std::cout << "Error: Please enter positive integers for rows and columns.\n";
-        clearInputBuffer();
-    }
-    clearInputBuffer();
-
-    std::vector<std::vector<char>> mat(n, std::vector<char>(m));
-
-    std::cout << "\nEnter the matrix elements row by row (use 's' for source, 'd' for destination, '0' for blocked, '1' for passable):\n";
-    bool validInput = true;
+bool validateMatrix(const std::vector<std::vector<char>>& mat, int n, int m) {
+    int sCount = 0, dCount = 0;
     for (int i = 0; i < n; i++) {
-        std::cout << "Row " << i + 1 << ": ";
         for (int j = 0; j < m; j++) {
-            char c;
-            std::cin >> c;
-            if (c == 's' || c == 'd' || c == '0' || c == '1') {
-                mat[i][j] = c;
-            } else {
-                std::cout << "Error: Invalid character '" << c << "'. Use 's', 'd', '0', or '1'.\n";
-                validInput = false;
+            char c = mat[i][j];
+            if (c == 's') sCount++;
+            else if (c == 'd') dCount++;
+            else if (c != '0' && c != '1') return false;
+        }
+    }
+    return sCount == 1 && dCount == 1;
+}
+
+void printMatrix(const std::vector<std::vector<char>>& mat, int n, int m) {
+    std::cout << "\nInput Matrix:\n";
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            std::cout << mat[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+
+int shortestPath(std::vector<std::vector<char>> &mat) {
+    int n = mat.size();   
+    int m = mat[0].size();
+
+    std::vector<int> dRow = {-1, 1, 0, 0};
+    std::vector<int> dCol = {0, 0, -1, 1};
+
+    std::vector<std::vector<bool>> visited(n, std::vector<bool>(m, false));
+
+    Queue<std::vector<int>> q;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (mat[i][j] == 's') {
+                q.enqueue({i, j, 0});
+                visited[i][j] = true;
                 break;
             }
         }
-        if (!validInput) break;
-        clearInputBuffer();
     }
 
-    if (validInput && !validateMatrix(mat, n, m)) {
-        std::cout << "Error: Matrix must contain exactly one 's' (source) and one 'd' (destination).\n";
-        return 1;
+    while (!q.isEmpty()) {
+        std::vector<int> curr = q.dequeue();
+        int row = curr[0];
+        int col = curr[1];
+        int dist = curr[2];
+
+        if (mat[row][col] == 'd') {
+            return dist;
+        }
+
+        for (int i = 0; i < 4; i++) {
+            int newRow = row + dRow[i];
+            int newCol = col + dCol[i];
+
+            if (isValid(newRow, newCol, n, m, mat, visited)) {
+                visited[newRow][newCol] = true;
+                q.enqueue({newRow, newCol, dist + 1});
+            }
+        }
     }
 
-    printMatrix(mat, n, m);
-
-    int result = shortestPath(mat);
-
-    std::cout << "\nResult:\n";
-    if (result != -1) {
-        std::cout << "Shortest path length from 's' to 'd': " << result << std::endl;
-    } else {
-        std::cout << "No path exists from source to destination.\n";
-    }
-    return 0;
+    return -1;
 }
