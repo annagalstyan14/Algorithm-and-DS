@@ -1,6 +1,7 @@
 #include "arrayDeque.h"
 #include <iostream>
 #include <stdexcept>
+#include <cassert>
 
 int main() {
     ArrayDeque<int> deque;
@@ -36,6 +37,14 @@ int main() {
     deque.swap(other_deque);
     std::cout << "After swap, deque size: " << deque.size() << "\n";
     std::cout << "After swap, other_deque size: " << other_deque.size() << "\n";
+
+        ArrayDeque<int> large_deque;
+    for (int i = 0; i < 1000; ++i) {
+        large_deque.push_back(i);
+        assert(large_deque.size() == static_cast<std::size_t>(i + 1));
+    }
+    large_deque.clear();
+    assert(large_deque.empty());
 
     return 0;
 }
