@@ -1,8 +1,12 @@
 #pragma once
+#include <utility>
 
+template <typename T>
 struct Node {
-    int value;
+    T data;
     Node* next;
 
-    Node(int val) : value(val), next(nullptr) {}
+    Node() : data(), next(nullptr) {}
+    Node(const T& value) : data(value), next(nullptr) {}
+    Node(T&& value) : data(std::move(value)), next(nullptr) {}
 };
