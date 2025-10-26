@@ -58,12 +58,10 @@ const T& arrayStack<T>::top() const {
 }
 
 template <typename T>
-void swap(Stack<T>& first, Stack<T>& second) noexcept {
-    using std::swap;
-    swap(first.arr, second.arr);
-    swap(first.capacity, second.capacity);
-    swap(first.top, second.top);
-    swap(first.count, second.count);
+void swap(arrayStack<T>& first, arrayStack<T>& second) noexcept {
+    std::vector<T> temp = first.elements;
+    first.elements = second.elements;
+    second.elements = temp;
 }
 
 #endif
