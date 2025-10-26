@@ -130,20 +130,28 @@ void ArrayDeque<T>::clear() {
 }
 
 template <typename T>
-void ArrayDeque<T>::swap(Deque<T>& other) noexcept {
-    if (auto* o = dynamic_cast<ArrayDeque<T>*>(&other)) {
-        swap(*o);
-    }
+void ArrayDeque<T>::swap(ArrayDeque<T>& other) noexcept {
+    std::vector<T> tempData = std::move(data);
+    data = std::move(other.data);
+    other.data = std::move(tempData);
+
+    std::size_t tempCapacity = capacity;
+    capacity = other.capacity;
+    other.capacity = tempCapacity;
+
+    std::size_t tempSize = size_;
+    size_ = other.size_;
+    other.size_ = tempSize;
+
+    std::size_t tempFront = front_;
+    front_ = other.front_;
+    other.front_ = tempFront;
+
+    std::size_t tempRear = rear_;
+    rear_ = other.rear_;
+    other.rear_ = tempRear;
 }
 
-template <typename T>
-void ArrayDeque<T>::swap(ArrayDeque<T>& other) noexcept {
-    data.swap(other.data);
-    std::swap(capacity, other.capacity);
-    std::swap(size_, other.size_);
-    std::swap(front_, other.front_);
-    std::swap(rear_, other.rear_);
-}
 
 template <typename T>
 void ArrayDeque<T>::resize(std::size_t new_size) {
