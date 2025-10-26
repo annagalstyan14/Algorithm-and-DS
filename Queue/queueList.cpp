@@ -56,11 +56,19 @@ LinkedQueue<T>& LinkedQueue<T>::operator=(LinkedQueue&& other) noexcept {
 
 template <typename T>
 void swap(LinkedQueue<T>& first, LinkedQueue<T>& second) noexcept {
-    using std::swap;
-    swap(first.front, second.front);
-    swap(first.rear, second.rear);
-    swap(first.count, second.count);    
+    LinkedQueue<T>::Node* tempFront = first.front;
+    first.front = second.front;
+    second.front = tempFront;
+
+    LinkedQueue<T>::Node* tempRear = first.rear;
+    first.rear = second.rear;
+    second.rear = tempRear;
+
+    size_t tempCount = first.count;
+    first.count = second.count;
+    second.count = tempCount;
 }
+
 
 template <typename T>
 void LinkedQueue<T>::enqueue(const T& item) {
