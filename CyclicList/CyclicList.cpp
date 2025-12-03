@@ -69,11 +69,10 @@ void CyclicList<T>::clear() {
 }   
 
 template<typename T>
-void CyclicList<T>::swap(List<T>& other) noexcept {
-    CyclicList<T>* otherCyclic = dynamic_cast<CyclicList<T>*>(&other);
-    if (otherCyclic) {
-        std::swap(head, otherCyclic->head);
-    }
+void CyclicList<T>::swap(CyclicList<T>& other) noexcept {
+    Node<T>* tempHead = head;
+    head = other.head;
+    other.head = tempHead;
 }   
 
 template<typename T>

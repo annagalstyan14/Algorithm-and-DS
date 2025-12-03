@@ -79,10 +79,11 @@ const T& linkedStack<T>::top() const {
 }
 
 template <typename T>
-void swap(LinkedStack<T>& first, LinkedStack<T>& second) noexcept {
-    using std::swap;
-    swap(first.top, second.top);
-    swap(first.count, second.count);
+void swap(linkedStack<T>& first, linkedStack<T>& second) noexcept {
+    Node<T>* temp = first.m_top;
+    first.m_top = second.m_top;
+    second.m_top = temp;
 }
+
 
 #endif

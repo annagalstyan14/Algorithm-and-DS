@@ -70,12 +70,25 @@ Queue<T>& Queue<T>::operator=(Queue&& other) noexcept {
 
 template <typename T>
 void swap(Queue<T>& first, Queue<T>& second) noexcept {
-    using std::swap;
-    swap(first.arr, second.arr);
-    swap(first.capacity, second.capacity);
-    swap(first.front, second.front);
-    swap(first.rear, second.rear);
-    swap(first.count, second.count);
+    T* tempArr = first.arr;
+    first.arr = second.arr;
+    second.arr = tempArr;
+
+    size_t tempCapacity = first.capacity;
+    first.capacity = second.capacity;
+    second.capacity = tempCapacity;
+
+    size_t tempFront = first.front;
+    first.front = second.front;
+    second.front = tempFront;
+
+    int tempRear = first.rear;
+    first.rear = second.rear;
+    second.rear = tempRear;
+
+    size_t tempCount = first.count;
+    first.count = second.count;
+    second.count = tempCount;
 }
 
 template <typename T>
